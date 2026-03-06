@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables (secrets)
+.env
+
+# Large ML models
+models/*
+!models/README.md
+!models/.gitignore
+
+# Datasets
+data/*
+!data/README.md
+
+# Evaluation outputs
+evaluation/*.json
+evaluation/*.txt
+evaluation/*.csv
+
+# Training outputs
+training_output*/
+cv_fold_*/
+
+# Uploads
+uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+ 
+node_modules/ 
+frontend/node_modules/ 
+frontend/dist/ 
+.hf_cache/ 
