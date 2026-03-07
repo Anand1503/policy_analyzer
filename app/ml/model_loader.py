@@ -13,6 +13,12 @@ import hashlib
 import logging
 import os
 import threading
+
+# Redirect HuggingFace cache to local models/ directory (fixes Windows PermissionError)
+_models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "models")
+os.environ.setdefault("HF_HOME", _models_dir)
+os.environ.setdefault("TRANSFORMERS_CACHE", _models_dir)
+
 import torch
 from typing import Optional, Tuple
 from transformers import (
@@ -125,11 +131,12 @@ def get_classifier() -> Tuple:
                     track_model_load = lambda *a: None
 
                 try:
-                    tokenizer = AutoTokenizer.from_pretrained(model_name)
+                    tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
                     model = AutoModelForSequenceClassification.from_pretrained(
                         model_name,
                         num_labels=num_labels,
                         ignore_mismatched_sizes=True,  # Base model → classification head
+                        local_files_only=True,
                     )
                     model.to(device)
                     model.eval()
@@ -150,9 +157,9 @@ def get_classifier() -> Tuple:
                         logger.warning("[model_loader] GPU fallback → retrying on CPU...")
                         torch.cuda.empty_cache()
                         try:
-                            tokenizer = AutoTokenizer.from_pretrained(model_name)
+                            tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
                             model = AutoModelForSequenceClassification.from_pretrained(
-                                model_name, num_labels=num_labels, ignore_mismatched_sizes=True,
+                                model_name, num_labels=num_labels, ignore_mismatched_sizes=True, local_files_only=True,
                             )
                             model.eval()
                             _models["classifier"] = (model, tokenizer)
@@ -198,8 +205,8 @@ def get_summarizer() -> Tuple:
                     track_model_load = lambda *a: None
 
                 try:
-                    tokenizer = T5Tokenizer.from_pretrained(model_name)
-                    model = T5ForConditionalGeneration.from_pretrained(model_name)
+                    tokenizer = T5Tokenizer.from_pretrained(model_name, local_files_only=True)
+                    model = T5ForConditionalGeneration.from_pretrained(model_name, local_files_only=True)
                     model.to(device)
                     model.eval()
 
@@ -218,8 +225,8 @@ def get_summarizer() -> Tuple:
                         logger.warning("[model_loader] GPU fallback → retrying on CPU...")
                         torch.cuda.empty_cache()
                         try:
-                            tokenizer = T5Tokenizer.from_pretrained(model_name)
-                            model = T5ForConditionalGeneration.from_pretrained(model_name)
+                            tokenizer = T5Tokenizer.from_pretrained(model_name, local_files_only=True)
+                            model = T5ForConditionalGeneration.from_pretrained(model_name, local_files_only=True)
                             model.eval()
                             _models["summarizer"] = (model, tokenizer)
                             _models["summarizer_device"] = torch.device("cpu")

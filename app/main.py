@@ -5,6 +5,16 @@ Hardened: model preloading, request ID, metrics, rate limiting, health probes, g
 """
 
 import os
+
+# ─── Set HuggingFace cache to local models/ directory BEFORE any ML imports ──
+# This prevents PermissionError on Windows when HF tries to write to C:\Users\.cache
+_project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_models_dir = os.path.join(_project_root, "models")
+os.environ["HF_HOME"] = _models_dir
+os.environ["TRANSFORMERS_CACHE"] = _models_dir
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+os.environ["HF_HUB_OFFLINE"] = "1"
 import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
