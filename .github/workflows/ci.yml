@@ -1,0 +1,102 @@
+name: Data Acquisition CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'data_acquisition/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'data_acquisition/**'
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Cache pip packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('data_acquisition/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        cd data_acquisition
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Lint with flake8
+      run: |
+        cd data_acquisition
+        flake8 app/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 app/ tests/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Run tests with pytest
+      env:
+        POSTGRES_URL: postgresql+asyncpg://test:test@localhost:5432/test_db
+        APP_ENV: test
+        USE_OCR: false
+      run: |
+        cd data_acquisition
+        pytest tests/ -v --cov=app --cov-report=xml --cov-report=term
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./data_acquisition/coverage.xml
+        flags: unittests
+        name: codecov-data-acquisition
+        fail_ci_if_error: false
+
+  build-check:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Verify project structure
+      run: |
+        cd data_acquisition
+        ls -la app/
+        ls -la app/api/
+        ls -la app/extractors/
+        echo "✅ Project structure verified"
+    
+    - name: Check requirements can be installed
+      run: |
+        cd data_acquisition
+        pip install -r requirements.txt
+        echo "✅ All dependencies installed successfully"

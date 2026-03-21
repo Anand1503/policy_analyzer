@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Typography ────────────────────────────────── */
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Custom Color Palette ──────────────────────── */
+  --color-ink: #0d1b2a;
+  --color-prussian: #1b263b;
+  --color-dusk: #415a77;
+  --color-denim: #778da9;
+  --color-alabaster: #e0e1dd;
+
+  /* ── Derived Shades ────────────────────────────── */
+  --color-ink-light: #162a3f;
+  --color-prussian-light: #253448;
+  --color-dusk-light: #567294;
+  --color-denim-light: #97aac2;
+  --color-alabaster-light: #edeee9;
+
+  /* ── Semantic Colors ───────────────────────────── */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* ── Accent ────────────────────────────────────── */
+  --color-accent: #6366f1;
+  --color-accent-light: #818cf8;
+
+  /* ── Shadows ───────────────────────────────────── */
+  --shadow-soft: 0 4px 20px -2px rgba(13, 27, 42, 0.08);
+  --shadow-hover: 0 10px 30px -5px rgba(13, 27, 42, 0.12);
+  --shadow-glow: 0 0 40px rgba(65, 90, 119, 0.15);
+}
+
+/* ── Base Styles ───────────────────────────────── */
+body {
+  @apply antialiased font-sans;
+  color: var(--color-ink);
+  background: var(--color-alabaster-light);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-display;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+}
+
+button {
+  @apply font-sans font-medium;
+}
+
+::selection {
+  background: rgba(65, 90, 119, 0.2);
+}
+
+/* ── Scrollbar ─────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-prussian); }
+::-webkit-scrollbar-thumb { background: var(--color-dusk); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-denim); }
+
+/* ── Animations ────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }

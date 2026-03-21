@@ -1,0 +1,77 @@
+# ═══════════════════════════════════════════════════════════
+# Intelligent Policy Analyzer — .gitignore
+# ═══════════════════════════════════════════════════════════
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables (secrets)
+.env
+backend/.env
+
+# Large ML models
+backend/models/*
+!backend/models/README.md
+!backend/models/.gitignore
+
+# Datasets
+backend/data/*
+!backend/data/README.md
+
+# Evaluation outputs
+backend/evaluation/*.json
+backend/evaluation/*.txt
+backend/evaluation/*.csv
+
+# Training outputs
+backend/training_output*/
+backend/cv_fold_*/
+
+# Uploads
+backend/uploads/
+
+# Frontend build
+frontend/node_modules/
+frontend/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# HuggingFace cache
+.hf_cache/
+.cache/
+
+# Data acquisition (legacy)
+data_acquisition/
+
+# Backup directories
+frontend_src_backup/
+
+# Misc
+*.bak
+*.tmp
