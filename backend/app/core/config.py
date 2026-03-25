@@ -55,11 +55,9 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "./uploads/raw_documents"
     EXTRACTED_DIR: str = "./uploads/extracted_text"
     MAX_UPLOAD_MB: int = 50
-    ALLOWED_EXTENSIONS: List[str] = ["pdf", "docx", "doc", "html", "txt"]
+    ALLOWED_EXTENSIONS: List[str] = ["pdf", "docx", "doc", "html", "txt", "png", "jpg", "jpeg", "tiff", "bmp"]
 
-    # ─── ML / LLM ────────────────────────────────────────────
-    OLLAMA_BASE_URL: str = "http://localhost:11434"
-    LLM_MODEL: str = "mistral"
+    # ─── ML Models (all local, no external APIs) ──────────────
     EMBEDDING_MODEL: str = "./models/all-MiniLM-L6-v2"
     CLASSIFIER_MODEL: str = "./models/legal-bert"
     SUMMARIZER_MODEL: str = "./models/t5-base"

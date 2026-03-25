@@ -1,12 +1,13 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ShieldCheck, LogOut, LayoutDashboard, Upload, Clock } from 'lucide-react';
+import { ShieldCheck, LogOut, LayoutDashboard, Upload, Clock, MessageSquare } from 'lucide-react';
 
 const NAV_ITEMS = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/upload', label: 'Upload', icon: Upload },
     { path: '/history', label: 'History', icon: Clock },
+    { path: '/chat', label: 'Chat', icon: MessageSquare },
 ];
 
 const Navbar = () => {

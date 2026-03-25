@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import GlobalChatPage from './pages/GlobalChatPage';
 import Navbar from './components/Navbar';
 import { Loader2 } from 'lucide-react';
 
@@ -49,6 +50,7 @@ const AppRoutes = () => {
       <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
       <Route path="/upload" element={<ProtectedRoute><DashboardPage initialView="upload" /></ProtectedRoute>} />
       <Route path="/history" element={<ProtectedRoute><DashboardPage initialView="history" /></ProtectedRoute>} />
+      <Route path="/chat" element={<ProtectedRoute><GlobalChatPage /></ProtectedRoute>} />
 
       {/* Default: landing if not logged in, dashboard if logged in */}
       <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/welcome" replace />} />
