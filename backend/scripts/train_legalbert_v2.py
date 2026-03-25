@@ -859,8 +859,6 @@ def main():
     parser.add_argument("--lr", type=float, default=LR, help=f"Learning rate (default: {LR})")
     args = parser.parse_args()
 
-    global EPOCHS
-    EPOCHS = args.epochs
 
     # Phase 1
     train_data, val_data, test_data = build_dataset()
