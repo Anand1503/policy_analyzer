@@ -59,7 +59,7 @@ class Settings(BaseSettings):
 
     # ─── ML Models (all local, no external APIs) ──────────────
     EMBEDDING_MODEL: str = "./models/all-MiniLM-L6-v2"
-    CLASSIFIER_MODEL: str = "./models/legal-bert"
+    CLASSIFIER_MODEL: str = "./models/legal-bert-final"
     SUMMARIZER_MODEL: str = "./models/t5-base"
     CHROMA_PERSIST_DIR: str = "./data/vector_store"
     SPACY_MODEL: str = "en_core_web_sm"

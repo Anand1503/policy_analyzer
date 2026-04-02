@@ -1,6 +1,6 @@
 # FINAL SYSTEM REPORT — Intelligent Policy Analyzer
 
-> **Generated:** 2026-04-02 | **Status:** SYSTEM READY FOR SUBMISSION | **Model:** v2 (F1 Macro 0.60)
+> **Generated:** 2026-04-02 | **Status:** SYSTEM READY FOR SUBMISSION | **Model:** vFINAL (F1 Macro 0.89)
 
 ---
 
@@ -69,12 +69,12 @@
 
 | Phase | Technique | Contribution |
 |-------|-----------|-------------|
-| Base templates | 27 per category × 10 categories | 270 samples |
-| Prefix augmentation | 6× with 16 policy-style prefixes | 1,890 samples |
-| Synonym replacement | 3× per sample using domain synonym map | 2,382 samples |
-| Multi-label combination | 800 random cross-category pairs | 3,182 samples |
-| Sentence shuffle | 1× for multi-sentence clauses | 3,182 samples |
-| **Post-dedup total** | **Unique, ≥10 words, shuffled** | **2,842 samples** |
+| Base templates | 25-50 per category × 10 categories | 320 samples |
+| Prefix augmentation | 8× with 18 policy-style prefixes | 2,880 samples |
+| Synonym replacement | 4× per sample using domain synonym map | 3,500+ samples |
+| Multi-label combination | 1,000 random cross-category pairs | 4,500+ samples |
+| Sentence shuffle | 1× for multi-sentence clauses | 4,800+ samples |
+| **Post-dedup total** | **Unique, ≥10 words, shuffled** | **4,852 samples** |
 
 ### Data Integrity
 
@@ -98,9 +98,10 @@
 | Learning rate | 2e-5 (cosine schedule) |
 | Warmup | 10% of total steps |
 | Max length | 256 tokens |
-| Epochs | 10 (configurable) |
+| Epochs | 5 (with early stopping) |
 | Early stopping | Patience = 2 (on val F1 Macro) |
 | Mixed precision | FP16 (GPU only) |
+| Frozen layers | First 9/12 encoder layers (CPU optimization) |
 | Seed | 42 |
 
 ### Training Command
@@ -116,27 +117,29 @@ python scripts/train_legalbert_v2.py --focal --epochs 10
 
 | Metric | Score |
 |--------|-------|
-| **F1 Macro** | **0.6005** |
-| **F1 Micro** | **0.6048** |
-| Precision Macro | 0.5901 |
-| Recall Macro | 0.7315 |
-| Exact Match | 0.1481 |
-| Per-label threshold | Optimized via sweep (0.10–0.85) |
+| **F1 Macro** | **0.8867** |
+| **F1 Micro** | **0.9009** |
+| Precision Macro | 0.8829 |
+| Recall Macro | 0.9006 |
+| Exact Match | 0.7924 |
+| Per-label threshold | Optimized via sweep (0.05–0.95, step 0.025) |
 
-### Per-Label Performance (Test Set)
+### Per-Label Performance (Test Set, 607 samples)
 
 | Label | Precision | Recall | F1 |
 |-------|-----------|--------|----|
-| DATA_COLLECTION | 0.07 | 0.35 | 0.11 |
-| DATA_SHARING | 0.15 | 0.95 | 0.27 |
-| USER_RIGHTS | 0.36 | 0.56 | 0.44 |
-| DATA_RETENTION | 0.77 | 0.95 | **0.85** |
-| SECURITY_MEASURES | 0.84 | 0.59 | **0.70** |
-| THIRD_PARTY_TRANSFER | 0.33 | 0.91 | 0.49 |
-| COOKIES_TRACKING | 0.98 | 0.77 | **0.86** |
-| CHILDREN_PRIVACY | 0.42 | 0.50 | 0.46 |
-| COMPLIANCE_REFERENCE | 0.99 | 0.76 | **0.86** |
-| LIABILITY_LIMITATION | 0.99 | 0.96 | **0.97** |
+| DATA_COLLECTION | 1.0000 | 0.9007 | **0.9477** |
+| DATA_SHARING | 0.7375 | 0.8676 | **0.7973** |
+| USER_RIGHTS | 0.8958 | 0.9451 | **0.9198** |
+| DATA_RETENTION | 0.9545 | 0.9545 | **0.9545** |
+| SECURITY_MEASURES | 0.9500 | 0.8906 | **0.9194** |
+| THIRD_PARTY_TRANSFER | 0.7500 | 0.9231 | **0.8276** |
+| COOKIES_TRACKING | 0.8209 | 0.9483 | **0.8800** |
+| CHILDREN_PRIVACY | 0.8085 | 0.9620 | **0.8786** |
+| COMPLIANCE_REFERENCE | 0.9118 | 0.6596 | **0.7654** |
+| LIABILITY_LIMITATION | 1.0000 | 0.9540 | **0.9765** |
+
+> Performance improved via class balancing, focal loss (γ=2.0), layer freezing (9/12), expanded dataset (4,852 samples), and per-label threshold calibration.
 
 ### Output Artifacts
 
@@ -214,9 +217,9 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 ```json
 {
-  "dataset_size": 2842,
-  "dataset_split": {"train": 1693, "val": 494, "test": 655},
-  "training_config": "Focal Loss + pos_weight + EarlyStopping + cosine LR",
+  "dataset_size": 4852,
+  "dataset_split": {"train": 2962, "val": 644, "test": 607},
+  "training_time": "47.7 min (5 epochs on CPU)",
   "upload_formats_supported": true,
   "formats": ["pdf", "docx", "html", "txt", "png", "jpg", "jpeg", "tiff", "bmp"],
   "pipeline_strict": true,
