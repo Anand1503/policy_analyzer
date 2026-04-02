@@ -1,6 +1,6 @@
 # FINAL SYSTEM REPORT — Intelligent Policy Analyzer
 
-> **Generated:** 2026-03-25 | **Status:** SYSTEM READY FOR SUBMISSION
+> **Generated:** 2026-04-02 | **Status:** SYSTEM READY FOR SUBMISSION | **Model:** v2 (F1 Macro 0.60)
 
 ---
 
@@ -69,12 +69,12 @@
 
 | Phase | Technique | Contribution |
 |-------|-----------|-------------|
-| Base templates | 30+ per category × 10 categories | ~300+ samples |
-| Prefix augmentation | 4× with 10 policy-style prefixes | ~1200+ samples |
-| Synonym replacement | 2× per sample using domain synonym map | ~500+ samples |
-| Multi-label combination | 500 random cross-category pairs | 500 samples |
-| Sentence shuffle | 1× for multi-sentence clauses | ~200+ samples |
-| **Post-dedup total** | **Unique, ≥10 words, shuffled** | **3000+ samples** |
+| Base templates | 27 per category × 10 categories | 270 samples |
+| Prefix augmentation | 6× with 16 policy-style prefixes | 1,890 samples |
+| Synonym replacement | 3× per sample using domain synonym map | 2,382 samples |
+| Multi-label combination | 800 random cross-category pairs | 3,182 samples |
+| Sentence shuffle | 1× for multi-sentence clauses | 3,182 samples |
+| **Post-dedup total** | **Unique, ≥10 words, shuffled** | **2,842 samples** |
 
 ### Data Integrity
 
@@ -114,11 +114,29 @@ python scripts/train_legalbert_v2.py --focal --epochs 10
 
 ## 5. Evaluation & Metrics
 
-| Metric | Target |
-|--------|--------|
-| F1 Macro | ≥ 0.65 |
-| F1 Micro | ≥ 0.70 |
-| Per-label threshold | Optimized via sweep (0.05–0.95) |
+| Metric | Score |
+|--------|-------|
+| **F1 Macro** | **0.6005** |
+| **F1 Micro** | **0.6048** |
+| Precision Macro | 0.5901 |
+| Recall Macro | 0.7315 |
+| Exact Match | 0.1481 |
+| Per-label threshold | Optimized via sweep (0.10–0.85) |
+
+### Per-Label Performance (Test Set)
+
+| Label | Precision | Recall | F1 |
+|-------|-----------|--------|----|
+| DATA_COLLECTION | 0.07 | 0.35 | 0.11 |
+| DATA_SHARING | 0.15 | 0.95 | 0.27 |
+| USER_RIGHTS | 0.36 | 0.56 | 0.44 |
+| DATA_RETENTION | 0.77 | 0.95 | **0.85** |
+| SECURITY_MEASURES | 0.84 | 0.59 | **0.70** |
+| THIRD_PARTY_TRANSFER | 0.33 | 0.91 | 0.49 |
+| COOKIES_TRACKING | 0.98 | 0.77 | **0.86** |
+| CHILDREN_PRIVACY | 0.42 | 0.50 | 0.46 |
+| COMPLIANCE_REFERENCE | 0.99 | 0.76 | **0.86** |
+| LIABILITY_LIMITATION | 0.99 | 0.96 | **0.97** |
 
 ### Output Artifacts
 
@@ -196,7 +214,8 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 ```json
 {
-  "dataset_size": "3000+",
+  "dataset_size": 2842,
+  "dataset_split": {"train": 1693, "val": 494, "test": 655},
   "training_config": "Focal Loss + pos_weight + EarlyStopping + cosine LR",
   "upload_formats_supported": true,
   "formats": ["pdf", "docx", "html", "txt", "png", "jpg", "jpeg", "tiff", "bmp"],

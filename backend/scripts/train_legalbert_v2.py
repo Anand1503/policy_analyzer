@@ -453,17 +453,20 @@ def build_dataset():
 
     log.info(f"  Base templates: {len(samples)}")
 
-    # ── Augmentation 1: Prefix variations (4x) ──
+    # ── Augmentation 1: Prefix variations (6x) ──
     prefixes = [
         "Please note that ", "It is important to understand that ",
         "For your information, ", "As part of our practices, ",
         "We want you to know that ", "You should be aware that ",
         "In accordance with our policies, ", "To be transparent, ",
         "For clarity, ", "We wish to inform you that ",
+        "Be advised that ", "Under this agreement, ",
+        "As stated in our terms, ", "Per our data practices, ",
+        "In compliance with applicable laws, ", "For your awareness, ",
     ]
     augmented = list(samples)
     for s in samples:
-        for _ in range(4):
+        for _ in range(6):
             prefix = random.choice(prefixes)
             new_text = prefix + s["text"][0].lower() + s["text"][1:]
             augmented.append({
@@ -473,9 +476,9 @@ def build_dataset():
 
     log.info(f"  After prefix augmentation: {len(augmented)}")
 
-    # ── Augmentation 2: Synonym replacement (2x) ──
+    # ── Augmentation 2: Synonym replacement (3x) ──
     for s in samples:
-        for _ in range(2):
+        for _ in range(3):
             new_text = synonym_replace(s["text"], n_replacements=2)
             if new_text != s["text"]:
                 augmented.append({
@@ -485,9 +488,9 @@ def build_dataset():
 
     log.info(f"  After synonym replacement: {len(augmented)}")
 
-    # ── Augmentation 3: Multi-label combination (500 pairs) ──
+    # ── Augmentation 3: Multi-label combination (800 pairs) ──
     categories = list(CLAUSE_TEMPLATES.keys())
-    for i in range(500):
+    for i in range(800):
         cat1, cat2 = random.sample(categories, 2)
         clause1 = random.choice(CLAUSE_TEMPLATES[cat1])
         clause2 = random.choice(CLAUSE_TEMPLATES[cat2])
