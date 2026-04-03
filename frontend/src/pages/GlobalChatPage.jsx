@@ -40,7 +40,7 @@ const GlobalChatPage = () => {
                     sources: res.data.sources || [],
                 },
             ]);
-        } catch (err) {
+        } catch {
             setMessages(prev => [
                 ...prev,
                 { role: 'assistant', content: 'Sorry, something went wrong. Please try again.', error: true },
@@ -66,17 +66,17 @@ const GlobalChatPage = () => {
                 display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem'
             }}>
                 <div style={{
-                    background: '#1b263b', padding: '0.75rem', borderRadius: '12px',
+                    background: 'var(--color-prussian)', padding: '0.75rem', borderRadius: '12px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
-                    <Globe style={{ width: '24px', height: '24px', color: '#e0e1dd' }} />
+                    <Globe style={{ width: '24px', height: '24px', color: 'var(--color-alabaster)' }} />
                 </div>
                 <div>
                     <h1 style={{
-                        fontSize: '1.5rem', fontWeight: '700', margin: 0, color: '#0d1b2a'
+                        fontSize: '1.5rem', fontWeight: '700', margin: 0, color: 'var(--color-ink)'
                     }}>Global Policy Assistant</h1>
                     <p style={{
-                        fontSize: '0.85rem', color: '#778da9', margin: 0
+                        fontSize: '0.85rem', color: 'var(--color-denim)', margin: 0
                     }}>
                         Ask questions across all {documents.length} uploaded documents
                     </p>
@@ -85,7 +85,7 @@ const GlobalChatPage = () => {
 
             {/* Chat Container */}
             <div style={{
-                background: '#fff', borderRadius: '16px', border: '1px solid #e0e1dd',
+                background: 'var(--color-card)', borderRadius: '16px', border: '1px solid #e0e1dd',
                 display: 'flex', flexDirection: 'column', height: 'calc(100vh - 200px)',
                 boxShadow: '0 4px 24px rgba(13, 27, 42, 0.08)'
             }}>
@@ -97,10 +97,10 @@ const GlobalChatPage = () => {
                     {messages.length === 0 && (
                         <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
                             <Brain style={{
-                                width: '48px', height: '48px', color: '#778da9',
+                                width: '48px', height: '48px', color: 'var(--color-denim)',
                                 margin: '0 auto 1rem', opacity: 0.4
                             }} />
-                            <p style={{ color: '#778da9', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                            <p style={{ color: 'var(--color-denim)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
                                 Ask anything about all your uploaded policies
                             </p>
                             <div style={{
@@ -112,19 +112,19 @@ const GlobalChatPage = () => {
                                         key={i}
                                         onClick={() => setInput(s)}
                                         style={{
-                                            background: '#f5f6f4', border: '1px solid #e0e1dd',
+                                            background: 'var(--color-alabaster)', border: '1px solid #e0e1dd',
                                             borderRadius: '10px', padding: '0.75rem',
-                                            fontSize: '0.8rem', color: '#415a77',
+                                            fontSize: '0.8rem', color: 'var(--color-dusk)',
                                             cursor: 'pointer', textAlign: 'left',
                                             transition: 'all 0.2s'
                                         }}
                                         onMouseOver={e => {
-                                            e.target.style.background = '#1b263b';
-                                            e.target.style.color = '#e0e1dd';
+                                            e.target.style.background = 'var(--color-prussian)';
+                                            e.target.style.color = 'var(--color-alabaster)';
                                         }}
                                         onMouseOut={e => {
-                                            e.target.style.background = '#f5f6f4';
-                                            e.target.style.color = '#415a77';
+                                            e.target.style.background = 'var(--color-alabaster)';
+                                            e.target.style.color = 'var(--color-dusk)';
                                         }}
                                     >
                                         {s}
@@ -146,23 +146,23 @@ const GlobalChatPage = () => {
                         >
                             {msg.role === 'assistant' && (
                                 <div style={{
-                                    background: '#1b263b', padding: '6px',
+                                    background: 'var(--color-prussian)', padding: '6px',
                                     borderRadius: '8px', height: 'fit-content', flexShrink: 0
                                 }}>
-                                    <Brain style={{ width: '16px', height: '16px', color: '#e0e1dd' }} />
+                                    <Brain style={{ width: '16px', height: '16px', color: 'var(--color-alabaster)' }} />
                                 </div>
                             )}
                             <div style={{
                                 maxWidth: '80%', borderRadius: '14px',
                                 padding: '0.75rem 1rem',
-                                background: msg.role === 'user' ? '#415a77' :
-                                    msg.error ? '#fef2f2' : '#f5f6f4',
-                                color: msg.role === 'user' ? '#e0e1dd' :
-                                    msg.error ? '#b91c1c' : '#0d1b2a',
+                                background: msg.role === 'user' ? 'var(--color-dusk)' :
+                                    msg.error ? 'var(--color-card)' : 'var(--color-alabaster)',
+                                color: msg.role === 'user' ? 'var(--color-alabaster)' :
+                                    msg.error ? 'var(--color-danger)' : 'var(--color-ink)',
                                 border: msg.error ? '1px solid #fecaca' : 'none',
                             }}>
                                 {msg.role === 'assistant' ? (
-                                    <div className="prose prose-sm" style={{ maxWidth: 'none', fontSize: '0.9rem' }}>
+                                    <div className="prose prose-sm dark:prose-invert" style={{ maxWidth: 'none', fontSize: '0.9rem' }}>
                                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                                     </div>
                                 ) : (
@@ -175,16 +175,16 @@ const GlobalChatPage = () => {
                                         borderTop: '1px solid #e0e1dd'
                                     }}>
                                         <p style={{
-                                            fontSize: '0.7rem', fontWeight: 600, color: '#778da9',
+                                            fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-denim)',
                                             display: 'flex', alignItems: 'center', gap: '4px', margin: '0 0 0.5rem'
                                         }}>
                                             <BookOpen style={{ width: '12px', height: '12px' }} /> Sources
                                         </p>
                                         {msg.sources.map((src, j) => (
                                             <div key={j} style={{
-                                                fontSize: '0.75rem', background: 'rgba(255,255,255,0.7)',
+                                                fontSize: '0.75rem', background: 'var(--color-alabaster)',
                                                 borderRadius: '6px', padding: '0.5rem',
-                                                color: '#778da9', lineHeight: 1.5, marginBottom: '0.25rem'
+                                                color: 'var(--color-denim)', lineHeight: 1.5, marginBottom: '0.25rem'
                                             }}>
                                                 {src.slice(0, 200)}...
                                             </div>
@@ -194,10 +194,10 @@ const GlobalChatPage = () => {
                             </div>
                             {msg.role === 'user' && (
                                 <div style={{
-                                    background: '#415a77', padding: '6px',
+                                    background: 'var(--color-dusk)', padding: '6px',
                                     borderRadius: '8px', height: 'fit-content', flexShrink: 0
                                 }}>
-                                    <User style={{ width: '16px', height: '16px', color: '#e0e1dd' }} />
+                                    <User style={{ width: '16px', height: '16px', color: 'var(--color-alabaster)' }} />
                                 </div>
                             )}
                         </motion.div>
@@ -206,21 +206,21 @@ const GlobalChatPage = () => {
                     {loading && (
                         <div style={{ display: 'flex', gap: '0.75rem' }}>
                             <div style={{
-                                background: '#1b263b', padding: '6px',
+                                background: 'var(--color-prussian)', padding: '6px',
                                 borderRadius: '8px', height: 'fit-content'
                             }}>
-                                <Brain style={{ width: '16px', height: '16px', color: '#e0e1dd' }} />
+                                <Brain style={{ width: '16px', height: '16px', color: 'var(--color-alabaster)' }} />
                             </div>
                             <div style={{
-                                background: '#f5f6f4', borderRadius: '14px',
+                                background: 'var(--color-alabaster)', borderRadius: '14px',
                                 padding: '0.75rem 1rem', display: 'flex',
                                 alignItems: 'center', gap: '0.5rem'
                             }}>
                                 <Loader2 style={{
-                                    width: '16px', height: '16px', color: '#778da9',
+                                    width: '16px', height: '16px', color: 'var(--color-denim)',
                                     animation: 'spin 1s linear infinite'
                                 }} />
-                                <span style={{ fontSize: '0.85rem', color: '#778da9' }}>
+                                <span style={{ fontSize: '0.85rem', color: 'var(--color-denim)' }}>
                                     Searching across all documents...
                                 </span>
                             </div>
@@ -241,19 +241,19 @@ const GlobalChatPage = () => {
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Ask about all your policies..."
                         style={{
-                            flex: 1, background: '#f5f6f4', border: '1px solid #e0e1dd',
+                            flex: 1, background: 'var(--color-alabaster)', border: '1px solid #e0e1dd',
                             borderRadius: '10px', padding: '0.75rem 1rem',
-                            fontSize: '0.9rem', outline: 'none', color: '#0d1b2a'
+                            fontSize: '0.9rem', outline: 'none', color: 'var(--color-ink)'
                         }}
-                        onFocus={e => e.target.style.borderColor = '#415a77'}
-                        onBlur={e => e.target.style.borderColor = '#e0e1dd'}
+                        onFocus={e => e.target.style.borderColor = 'var(--color-dusk)'}
+                        onBlur={e => e.target.style.borderColor = 'var(--color-alabaster)'}
                         disabled={loading}
                     />
                     <button
                         type="submit"
                         disabled={loading || !input.trim()}
                         style={{
-                            background: '#415a77', color: '#e0e1dd',
+                            background: 'var(--color-dusk)', color: 'var(--color-alabaster)',
                             padding: '0 1.25rem', borderRadius: '10px',
                             border: 'none', cursor: 'pointer',
                             opacity: loading || !input.trim() ? 0.5 : 1,

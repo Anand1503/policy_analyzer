@@ -26,10 +26,15 @@ backend/.env
 backend/models/*
 !backend/models/README.md
 !backend/models/.gitignore
+models/
 
 # Datasets
 backend/data/*
 !backend/data/README.md
+data/
+
+# Root-level uploads
+uploads/
 
 # Evaluation outputs
 backend/evaluation/*.json

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* ── Typography ────────────────────────────────── */
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
@@ -33,13 +35,38 @@
   --shadow-soft: 0 4px 20px -2px rgba(13, 27, 42, 0.08);
   --shadow-hover: 0 10px 30px -5px rgba(13, 27, 42, 0.12);
   --shadow-glow: 0 0 40px rgba(65, 90, 119, 0.15);
+
+  /* ── Component ─────────────────────────────────── */
+  --color-card: #ffffff;
+  --color-card-border: rgba(119,141,169,0.15);
+  --color-input-bg: #fafafa;
+  --color-text-primary: #1b263b;
+  --color-text-muted: #778da9;
 }
 
-/* ── Base Styles ───────────────────────────────── */
 body {
-  @apply antialiased font-sans;
+  @apply antialiased font-sans transition-colors duration-300;
   color: var(--color-ink);
   background: var(--color-alabaster-light);
+}
+
+.dark {
+  --color-ink: #edeee9;
+  --color-prussian: #97aac2;
+  --color-dusk: #778da9;
+  --color-denim: #415a77;
+  --color-alabaster: #1b263b;
+  --color-alabaster-light: #0d1b2a;
+  --color-ink-light: #e0e1dd;
+  --color-prussian-light: #778da9;
+  --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+  --color-card: #1b263b;
+  --color-card-border: rgba(119,141,169,0.12);
+  --color-input-bg: #162233;
+  --color-text-primary: #e0e1dd;
+  --color-text-muted: #778da9;
 }
 
 h1, h2, h3, h4, h5, h6 {

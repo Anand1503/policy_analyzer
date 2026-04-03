@@ -34,7 +34,7 @@ const ChatPanel = ({ documentId }) => {
                     sources: res.data.sources || [],
                 },
             ]);
-        } catch (err) {
+        } catch {
             setMessages((prev) => [
                 ...prev,
                 { role: 'assistant', content: 'Sorry, something went wrong. Please try again.', error: true },

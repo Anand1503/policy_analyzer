@@ -10,9 +10,9 @@ import { RiskDistributionChart, CategoryChart, ComplianceChart, ShapExplanation 
 
 const riskStyle = (level) => {
     const map = {
-        low:      { bg: 'rgba(16,185,129,0.06)', border: 'rgba(16,185,129,0.15)', text: '#10b981', label: 'Low Risk' },
-        medium:   { bg: 'rgba(245,158,11,0.06)', border: 'rgba(245,158,11,0.15)', text: '#f59e0b', label: 'Medium Risk' },
-        high:     { bg: 'rgba(239,68,68,0.06)',   border: 'rgba(239,68,68,0.15)',  text: '#ef4444', label: 'High Risk' },
+        low:      { bg: 'rgba(16,185,129,0.06)', border: 'rgba(16,185,129,0.15)', text: 'var(--color-success)', label: 'Low Risk' },
+        medium:   { bg: 'rgba(245,158,11,0.06)', border: 'rgba(245,158,11,0.15)', text: 'var(--color-warning)', label: 'Medium Risk' },
+        high:     { bg: 'rgba(239,68,68,0.06)',   border: 'rgba(239,68,68,0.15)',  text: 'var(--color-danger)', label: 'High Risk' },
         critical: { bg: 'rgba(153,27,27,0.08)',   border: 'rgba(153,27,27,0.2)',   text: '#991b1b', label: 'Critical' },
     };
     return map[level] || map.low;
@@ -20,9 +20,9 @@ const riskStyle = (level) => {
 
 const RiskIcon = ({ level, size = 18 }) => {
     const props = { width: size, height: size };
-    if (level === 'low') return <ShieldCheck {...props} style={{ color: '#10b981' }} />;
-    if (level === 'high' || level === 'critical') return <ShieldAlert {...props} style={{ color: '#ef4444' }} />;
-    return <AlertTriangle {...props} style={{ color: '#f59e0b' }} />;
+    if (level === 'low') return <ShieldCheck {...props} style={{ color: 'var(--color-success)' }} />;
+    if (level === 'high' || level === 'critical') return <ShieldAlert {...props} style={{ color: 'var(--color-danger)' }} />;
+    return <AlertTriangle {...props} style={{ color: 'var(--color-warning)' }} />;
 };
 
 const formatCategory = (cat) =>
@@ -55,7 +55,7 @@ const AnalysisResults = ({ data }) => {
         <div className="space-y-5">
 
             {/* ── 1. Summary Card ──────────────────────── */}
-            <div className="rounded-xl border p-6" style={{ background: 'white', borderColor: 'rgba(119,141,169,0.12)' }}>
+            <div className="rounded-xl border p-6" style={{ background: 'var(--color-card)', borderColor: 'var(--color-card-border)' }}>
                 <div className="flex flex-col md:flex-row md:items-center gap-6">
                     {/* Score ring */}
                     <div className="flex-shrink-0">
@@ -69,10 +69,10 @@ const AnalysisResults = ({ data }) => {
                                 />
                             </svg>
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-2xl font-display font-bold" style={{ color: '#0d1b2a' }}>
+                                <span className="text-2xl font-display font-bold" style={{ color: 'var(--color-ink)' }}>
                                     {scorePercent}
                                 </span>
-                                <span className="text-[10px] font-medium" style={{ color: '#778da9' }}>/ 100</span>
+                                <span className="text-[10px] font-medium" style={{ color: 'var(--color-denim)' }}>/ 100</span>
                             </div>
                         </div>
                     </div>
@@ -80,13 +80,13 @@ const AnalysisResults = ({ data }) => {
                     {/* Summary text */}
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
-                            <h2 className="text-lg font-display font-bold" style={{ color: '#0d1b2a' }}>Analysis Report</h2>
+                            <h2 className="text-lg font-display font-bold" style={{ color: 'var(--color-ink)' }}>Analysis Report</h2>
                             <span className="text-xs font-semibold px-2.5 py-1 rounded-full"
                                 style={{ background: rs.bg, color: rs.text, border: `1px solid ${rs.border}` }}>
                                 {rs.label}
                             </span>
                         </div>
-                        <p className="text-sm leading-relaxed" style={{ color: '#415a77' }}>
+                        <p className="text-sm leading-relaxed" style={{ color: 'var(--color-dusk)' }}>
                             {summary || 'Analysis complete. See detailed findings below.'}
                         </p>
 
@@ -98,8 +98,8 @@ const AnalysisResults = ({ data }) => {
                                 { label: 'Categories', value: category_breakdown ? Object.keys(category_breakdown).length : 0 },
                             ].map(s => (
                                 <div key={s.label} className="px-3 py-2 rounded-lg" style={{ background: 'rgba(119,141,169,0.05)' }}>
-                                    <span className="text-base font-display font-bold" style={{ color: '#0d1b2a' }}>{s.value}</span>
-                                    <span className="text-[11px] ml-1.5" style={{ color: '#778da9' }}>{s.label}</span>
+                                    <span className="text-base font-display font-bold" style={{ color: 'var(--color-ink)' }}>{s.value}</span>
+                                    <span className="text-[11px] ml-1.5" style={{ color: 'var(--color-denim)' }}>{s.label}</span>
                                 </div>
                             ))}
                         </div>
@@ -117,9 +117,9 @@ const AnalysisResults = ({ data }) => {
 
             {/* ── 3. Recommendations ───────────────────── */}
             {recommendations?.length > 0 && (
-                <div className="rounded-xl border p-5" style={{ background: 'white', borderColor: 'rgba(119,141,169,0.12)' }}>
-                    <h3 className="text-sm font-display font-semibold mb-4 flex items-center gap-2" style={{ color: '#0d1b2a' }}>
-                        <Lightbulb className="w-4 h-4" style={{ color: '#f59e0b' }} />
+                <div className="rounded-xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-card-border)' }}>
+                    <h3 className="text-sm font-display font-semibold mb-4 flex items-center gap-2" style={{ color: 'var(--color-ink)' }}>
+                        <Lightbulb className="w-4 h-4" style={{ color: 'var(--color-warning)' }} />
                         Recommendations
                     </h3>
                     <div className="space-y-2">
@@ -127,10 +127,10 @@ const AnalysisResults = ({ data }) => {
                             <div key={i} className="flex items-start gap-3 p-3 rounded-lg"
                                 style={{ background: 'rgba(245,158,11,0.04)', border: '1px solid rgba(245,158,11,0.08)' }}>
                                 <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
-                                    style={{ background: 'rgba(245,158,11,0.12)', color: '#f59e0b' }}>
+                                    style={{ background: 'rgba(245,158,11,0.12)', color: 'var(--color-warning)' }}>
                                     {i + 1}
                                 </span>
-                                <p className="text-sm leading-relaxed" style={{ color: '#1b263b' }}>{rec}</p>
+                                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-prussian)' }}>{rec}</p>
                             </div>
                         ))}
                     </div>
@@ -138,13 +138,13 @@ const AnalysisResults = ({ data }) => {
             )}
 
             {/* ── 4. Clause Details ────────────────────── */}
-            <div className="rounded-xl border" style={{ background: 'white', borderColor: 'rgba(119,141,169,0.12)' }}>
+            <div className="rounded-xl border" style={{ background: 'var(--color-card)', borderColor: 'var(--color-card-border)' }}>
                 <div className="p-5" style={{ borderBottom: '1px solid rgba(119,141,169,0.08)' }}>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                        <h3 className="text-sm font-display font-semibold flex items-center gap-2" style={{ color: '#0d1b2a' }}>
-                            <ListChecks className="w-4 h-4" style={{ color: '#415a77' }} />
+                        <h3 className="text-sm font-display font-semibold flex items-center gap-2" style={{ color: 'var(--color-ink)' }}>
+                            <ListChecks className="w-4 h-4" style={{ color: 'var(--color-dusk)' }} />
                             Clause Details
-                            <span className="text-xs font-normal px-2 py-0.5 rounded-full" style={{ background: 'rgba(119,141,169,0.08)', color: '#778da9' }}>
+                            <span className="text-xs font-normal px-2 py-0.5 rounded-full" style={{ background: 'var(--color-card-border)', color: 'var(--color-denim)' }}>
                                 {filteredClauses?.length || 0}
                             </span>
                         </h3>
@@ -153,16 +153,16 @@ const AnalysisResults = ({ data }) => {
                         <div className="flex gap-1 p-0.5 rounded-lg" style={{ background: 'rgba(119,141,169,0.05)' }}>
                             {[
                                 { key: 'all', label: 'All' },
-                                { key: 'high', label: 'High Risk', color: '#ef4444' },
-                                { key: 'medium', label: 'Medium', color: '#f59e0b' },
-                                { key: 'low', label: 'Low', color: '#10b981' },
+                                { key: 'high', label: 'High Risk', color: 'var(--color-danger)' },
+                                { key: 'medium', label: 'Medium', color: 'var(--color-warning)' },
+                                { key: 'low', label: 'Low', color: 'var(--color-success)' },
                             ].map(tab => (
                                 <button key={tab.key}
                                     onClick={() => setFilter(tab.key)}
                                     className="text-[11px] font-medium px-2.5 py-1 rounded-md transition-all"
                                     style={{
-                                        background: filter === tab.key ? 'white' : 'transparent',
-                                        color: filter === tab.key ? (tab.color || '#0d1b2a') : '#778da9',
+                                        background: filter === tab.key ? 'var(--color-card)' : 'transparent',
+                                        color: filter === tab.key ? (tab.color || 'var(--color-ink)') : 'var(--color-denim)',
                                         boxShadow: filter === tab.key ? '0 1px 3px rgba(13,27,42,0.06)' : 'none',
                                     }}>
                                     {tab.label}
@@ -177,8 +177,8 @@ const AnalysisResults = ({ data }) => {
                 <div>
                     {filteredClauses?.length === 0 ? (
                         <div className="p-8 text-center">
-                            <ShieldCheck className="w-8 h-8 mx-auto mb-2" style={{ color: '#10b981' }} />
-                            <p className="text-sm" style={{ color: '#778da9' }}>No clauses match this filter.</p>
+                            <ShieldCheck className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--color-success)' }} />
+                            <p className="text-sm" style={{ color: 'var(--color-denim)' }}>No clauses match this filter.</p>
                         </div>
                     ) : (
                         filteredClauses?.map((clause, i) => {
@@ -200,11 +200,11 @@ const AnalysisResults = ({ data }) => {
                                                     {cs.label}
                                                 </span>
                                                 <span className="text-xs font-medium px-2 py-0.5 rounded-full"
-                                                    style={{ background: 'rgba(65,90,119,0.06)', color: '#415a77' }}>
+                                                    style={{ background: 'rgba(65,90,119,0.06)', color: 'var(--color-dusk)' }}>
                                                     {formatCategory(clause.category)}
                                                 </span>
                                             </div>
-                                            <p className="text-sm leading-relaxed" style={{ color: '#1b263b' }}>
+                                            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-prussian)' }}>
                                                 {isOpen ? clause.clause_text : (clause.clause_text?.length > 200 ? clause.clause_text.slice(0, 200) + '…' : clause.clause_text)}
                                             </p>
                                         </div>
@@ -214,8 +214,8 @@ const AnalysisResults = ({ data }) => {
                                                 {Math.round((clause.risk_score || 0) * 100)}%
                                             </span>
                                             {isOpen
-                                                ? <ChevronUp className="w-4 h-4" style={{ color: '#778da9' }} />
-                                                : <ChevronDown className="w-4 h-4" style={{ color: '#778da9' }} />
+                                                ? <ChevronUp className="w-4 h-4" style={{ color: 'var(--color-denim)' }} />
+                                                : <ChevronDown className="w-4 h-4" style={{ color: 'var(--color-denim)' }} />
                                             }
                                         </div>
                                     </div>
@@ -233,10 +233,10 @@ const AnalysisResults = ({ data }) => {
                                                     {/* Explanation */}
                                                     {clause.explanation && (
                                                         <div className="p-3 rounded-lg" style={{ background: 'rgba(119,141,169,0.04)' }}>
-                                                            <p className="text-xs font-semibold mb-1" style={{ color: '#415a77' }}>
+                                                            <p className="text-xs font-semibold mb-1" style={{ color: 'var(--color-dusk)' }}>
                                                                 Why this matters
                                                             </p>
-                                                            <p className="text-sm leading-relaxed" style={{ color: '#1b263b' }}>
+                                                            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-prussian)' }}>
                                                                 {clause.explanation}
                                                             </p>
                                                         </div>
@@ -245,7 +245,7 @@ const AnalysisResults = ({ data }) => {
                                                     {/* Key phrases (SHAP tokens simplified) */}
                                                     {clause.shap_tokens && clause.shap_scores && (
                                                         <div>
-                                                            <p className="text-xs font-semibold mb-1.5" style={{ color: '#415a77' }}>
+                                                            <p className="text-xs font-semibold mb-1.5" style={{ color: 'var(--color-dusk)' }}>
                                                                 Key phrases that affect risk
                                                             </p>
                                                             <div className="flex flex-wrap gap-0.5 p-3 rounded-lg" style={{ background: 'rgba(119,141,169,0.03)' }}>
@@ -258,15 +258,15 @@ const AnalysisResults = ({ data }) => {
                                                                     return (
                                                                         <span key={j}
                                                                             className="inline-block px-1 py-0.5 rounded text-xs"
-                                                                            style={{ backgroundColor: bg, color: Math.abs(norm) > 0.5 ? 'white' : '#0d1b2a' }}>
+                                                                            style={{ backgroundColor: bg, color: Math.abs(norm) > 0.5 ? 'var(--color-card)' : 'var(--color-ink)' }}>
                                                                             {token}
                                                                         </span>
                                                                     );
                                                                 })}
                                                             </div>
-                                                            <p className="text-[10px] mt-1" style={{ color: '#778da9' }}>
-                                                                <span style={{ color: '#ef4444' }}>■</span> increases risk &nbsp;
-                                                                <span style={{ color: '#10b981' }}>■</span> reduces risk
+                                                            <p className="text-[10px] mt-1" style={{ color: 'var(--color-denim)' }}>
+                                                                <span style={{ color: 'var(--color-danger)' }}>■</span> increases risk &nbsp;
+                                                                <span style={{ color: 'var(--color-success)' }}>■</span> reduces risk
                                                             </p>
                                                         </div>
                                                     )}
@@ -274,15 +274,15 @@ const AnalysisResults = ({ data }) => {
                                                     {/* Meta row */}
                                                     <div className="flex gap-4 pt-1">
                                                         <div>
-                                                            <p className="text-[10px]" style={{ color: '#778da9' }}>Risk Score</p>
+                                                            <p className="text-[10px]" style={{ color: 'var(--color-denim)' }}>Risk Score</p>
                                                             <p className="text-sm font-bold" style={{ color: cs.text }}>
                                                                 {Math.round((clause.risk_score || 0) * 100)}%
                                                             </p>
                                                         </div>
                                                         {clause.confidence && (
                                                             <div>
-                                                                <p className="text-[10px]" style={{ color: '#778da9' }}>Confidence</p>
-                                                                <p className="text-sm font-bold" style={{ color: '#415a77' }}>
+                                                                <p className="text-[10px]" style={{ color: 'var(--color-denim)' }}>Confidence</p>
+                                                                <p className="text-sm font-bold" style={{ color: 'var(--color-dusk)' }}>
                                                                     {Math.round(clause.confidence * 100)}%
                                                                 </p>
                                                             </div>
