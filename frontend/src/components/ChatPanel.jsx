@@ -52,30 +52,83 @@ const ChatPanel = ({ documentId }) => {
     ];
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-[600px]">
+        <div style={{
+            background: 'var(--color-card)',
+            borderRadius: '16px',
+            border: '1px solid var(--color-card-border)',
+            boxShadow: 'var(--shadow-soft)',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '600px',
+            overflow: 'hidden',
+        }}>
             {/* Header */}
-            <div className="p-4 border-b border-slate-100 flex items-center gap-3">
-                <div className="bg-indigo-100 p-2 rounded-lg">
-                    <Brain className="w-5 h-5 text-indigo-600" />
+            <div style={{
+                padding: '16px 20px',
+                borderBottom: '1px solid var(--color-card-border)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: 'rgba(99,102,241,0.04)',
+            }}>
+                <div style={{
+                    background: 'rgba(99,102,241,0.12)',
+                    padding: '8px',
+                    borderRadius: '10px',
+                }}>
+                    <Brain size={20} style={{ color: 'var(--color-accent)' }} />
                 </div>
                 <div>
-                    <h3 className="font-bold text-slate-800">AI Policy Assistant</h3>
-                    <p className="text-xs text-slate-400">Ask questions about the document</p>
+                    <h3 style={{ fontWeight: '700', color: 'var(--color-text-primary)', margin: 0, fontSize: '15px' }}>AI Policy Assistant</h3>
+                    <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: 0 }}>Ask questions about the document</p>
                 </div>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+            }}>
                 {messages.length === 0 && (
-                    <div className="text-center py-12">
-                        <Brain className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-                        <p className="text-slate-400 text-sm mb-6">Ask anything about the uploaded document</p>
-                        <div className="grid grid-cols-2 gap-2 max-w-md mx-auto">
+                    <div style={{ textAlign: 'center', padding: '48px 0' }}>
+                        <Brain size={48} style={{ color: 'var(--color-card-border)', margin: '0 auto 16px' }} />
+                        <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', marginBottom: '24px' }}>
+                            Ask anything about the uploaded document
+                        </p>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gap: '8px',
+                            maxWidth: '420px',
+                            margin: '0 auto',
+                        }}>
                             {SUGGESTIONS.map((s, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setInput(s)}
-                                    className="text-xs bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-lg p-3 text-left text-slate-600 hover:text-indigo-700 transition-all"
+                                    style={{
+                                        fontSize: '12px',
+                                        background: 'rgba(99,102,241,0.04)',
+                                        border: '1px solid var(--color-card-border)',
+                                        borderRadius: '10px',
+                                        padding: '12px',
+                                        textAlign: 'left',
+                                        color: 'var(--color-text-primary)',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s',
+                                    }}
+                                    onMouseEnter={e => {
+                                        e.currentTarget.style.background = 'rgba(99,102,241,0.08)';
+                                        e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)';
+                                    }}
+                                    onMouseLeave={e => {
+                                        e.currentTarget.style.background = 'rgba(99,102,241,0.04)';
+                                        e.currentTarget.style.borderColor = 'var(--color-card-border)';
+                                    }}
                                 >
                                     {s}
                                 </button>
@@ -89,35 +142,81 @@ const ChatPanel = ({ documentId }) => {
                         key={i}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : ''}`}
+                        style={{
+                            display: 'flex',
+                            gap: '10px',
+                            justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                        }}
                     >
                         {msg.role === 'assistant' && (
-                            <div className="bg-indigo-100 p-1.5 rounded-lg h-fit flex-shrink-0">
-                                <Brain className="w-4 h-4 text-indigo-600" />
+                            <div style={{
+                                background: 'rgba(99,102,241,0.12)',
+                                padding: '6px',
+                                borderRadius: '8px',
+                                height: 'fit-content',
+                                flexShrink: 0,
+                            }}>
+                                <Brain size={16} style={{ color: 'var(--color-accent)' }} />
                             </div>
                         )}
-                        <div className={`max-w-[80%] rounded-xl px-4 py-3 ${msg.role === 'user'
-                                ? 'bg-blue-600 text-white'
+                        <div style={{
+                            maxWidth: '80%',
+                            borderRadius: '14px',
+                            padding: '12px 16px',
+                            ...(msg.role === 'user'
+                                ? {
+                                    background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))',
+                                    color: '#ffffff',
+                                }
                                 : msg.error
-                                    ? 'bg-red-50 text-red-700 border border-red-200'
-                                    : 'bg-slate-100 text-slate-700'
-                            }`}>
+                                    ? {
+                                        background: 'rgba(239,68,68,0.08)',
+                                        color: 'var(--color-danger)',
+                                        border: '1px solid rgba(239,68,68,0.2)',
+                                    }
+                                    : {
+                                        background: 'var(--color-input-bg)',
+                                        color: 'var(--color-text-primary)',
+                                        border: '1px solid var(--color-card-border)',
+                                    }
+                            ),
+                        }}>
                             {msg.role === 'assistant' ? (
-                                <div className="prose prose-sm max-w-none">
+                                <div style={{ fontSize: '14px', lineHeight: '1.6' }}>
                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                                 </div>
                             ) : (
-                                <p className="text-sm">{msg.content}</p>
+                                <p style={{ fontSize: '14px', margin: 0, lineHeight: '1.5' }}>{msg.content}</p>
                             )}
 
                             {/* Sources */}
                             {msg.sources?.length > 0 && (
-                                <div className="mt-3 pt-3 border-t border-slate-200 space-y-2">
-                                    <p className="text-xs font-semibold text-slate-500 flex items-center gap-1">
-                                        <BookOpen className="w-3 h-3" /> Sources
+                                <div style={{
+                                    marginTop: '12px',
+                                    paddingTop: '12px',
+                                    borderTop: '1px solid var(--color-card-border)',
+                                }}>
+                                    <p style={{
+                                        fontSize: '11px',
+                                        fontWeight: '600',
+                                        color: 'var(--color-text-muted)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        marginBottom: '8px',
+                                    }}>
+                                        <BookOpen size={12} /> Sources
                                     </p>
                                     {msg.sources.map((src, j) => (
-                                        <div key={j} className="text-xs bg-white/70 rounded p-2 text-slate-500 leading-relaxed">
+                                        <div key={j} style={{
+                                            fontSize: '12px',
+                                            background: 'rgba(119,141,169,0.06)',
+                                            borderRadius: '8px',
+                                            padding: '8px',
+                                            color: 'var(--color-text-muted)',
+                                            lineHeight: '1.4',
+                                            marginBottom: '4px',
+                                        }}>
                                             {src.slice(0, 200)}...
                                         </div>
                                     ))}
@@ -125,21 +224,40 @@ const ChatPanel = ({ documentId }) => {
                             )}
                         </div>
                         {msg.role === 'user' && (
-                            <div className="bg-blue-100 p-1.5 rounded-lg h-fit flex-shrink-0">
-                                <User className="w-4 h-4 text-blue-600" />
+                            <div style={{
+                                background: 'rgba(99,102,241,0.12)',
+                                padding: '6px',
+                                borderRadius: '8px',
+                                height: 'fit-content',
+                                flexShrink: 0,
+                            }}>
+                                <User size={16} style={{ color: 'var(--color-accent)' }} />
                             </div>
                         )}
                     </motion.div>
                 ))}
 
                 {loading && (
-                    <div className="flex gap-3">
-                        <div className="bg-indigo-100 p-1.5 rounded-lg h-fit">
-                            <Brain className="w-4 h-4 text-indigo-600" />
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <div style={{
+                            background: 'rgba(99,102,241,0.12)',
+                            padding: '6px',
+                            borderRadius: '8px',
+                            height: 'fit-content',
+                        }}>
+                            <Brain size={16} style={{ color: 'var(--color-accent)' }} />
                         </div>
-                        <div className="bg-slate-100 rounded-xl px-4 py-3 flex items-center gap-2">
-                            <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
-                            <span className="text-sm text-slate-400">Thinking...</span>
+                        <div style={{
+                            background: 'var(--color-input-bg)',
+                            borderRadius: '14px',
+                            padding: '12px 16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            border: '1px solid var(--color-card-border)',
+                        }}>
+                            <Loader2 size={16} style={{ color: 'var(--color-accent)', animation: 'spin 1s linear infinite' }} />
+                            <span style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>Thinking...</span>
                         </div>
                     </div>
                 )}
@@ -148,21 +266,51 @@ const ChatPanel = ({ documentId }) => {
             </div>
 
             {/* Input */}
-            <form onSubmit={sendMessage} className="p-4 border-t border-slate-100 flex gap-3">
+            <form onSubmit={sendMessage} style={{
+                padding: '16px 20px',
+                borderTop: '1px solid var(--color-card-border)',
+                display: 'flex',
+                gap: '10px',
+            }}>
                 <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask about the policy..."
-                    className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    style={{
+                        flex: 1,
+                        background: 'var(--color-input-bg)',
+                        border: '1.5px solid var(--color-card-border)',
+                        borderRadius: '12px',
+                        padding: '10px 16px',
+                        fontSize: '14px',
+                        color: 'var(--color-text-primary)',
+                        outline: 'none',
+                        transition: 'border-color 0.2s',
+                        fontFamily: 'inherit',
+                    }}
+                    onFocus={e => e.currentTarget.style.borderColor = 'var(--color-accent)'}
+                    onBlur={e => e.currentTarget.style.borderColor = 'var(--color-card-border)'}
                     disabled={loading}
                 />
                 <button
                     type="submit"
                     disabled={loading || !input.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg transition-colors disabled:opacity-50"
+                    style={{
+                        background: input.trim() ? 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))' : 'var(--color-card-border)',
+                        color: input.trim() ? '#ffffff' : 'var(--color-text-muted)',
+                        border: 'none',
+                        borderRadius: '12px',
+                        padding: '0 16px',
+                        cursor: input.trim() ? 'pointer' : 'default',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'all 0.2s',
+                        boxShadow: input.trim() ? '0 2px 10px rgba(99,102,241,0.3)' : 'none',
+                    }}
                 >
-                    <Send className="w-4 h-4" />
+                    <Send size={16} />
                 </button>
             </form>
         </div>

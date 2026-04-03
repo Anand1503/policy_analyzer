@@ -66,10 +66,10 @@ const GlobalChatPage = () => {
                 display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem'
             }}>
                 <div style={{
-                    background: 'var(--color-prussian)', padding: '0.75rem', borderRadius: '12px',
+                    background: 'rgba(99,102,241,0.08)', padding: '0.75rem', borderRadius: '12px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
-                    <Globe style={{ width: '24px', height: '24px', color: 'var(--color-alabaster)' }} />
+                    <Globe style={{ width: '24px', height: '24px', color: 'var(--color-accent)' }} />
                 </div>
                 <div>
                     <h1 style={{
@@ -85,7 +85,7 @@ const GlobalChatPage = () => {
 
             {/* Chat Container */}
             <div style={{
-                background: 'var(--color-card)', borderRadius: '16px', border: '1px solid #e0e1dd',
+                background: 'var(--color-card)', borderRadius: '16px', border: '1px solid var(--color-card-border)',
                 display: 'flex', flexDirection: 'column', height: 'calc(100vh - 200px)',
                 boxShadow: '0 4px 24px rgba(13, 27, 42, 0.08)'
             }}>
@@ -112,19 +112,19 @@ const GlobalChatPage = () => {
                                         key={i}
                                         onClick={() => setInput(s)}
                                         style={{
-                                            background: 'var(--color-alabaster)', border: '1px solid #e0e1dd',
+                                            background: 'rgba(99,102,241,0.04)', border: '1px solid var(--color-card-border)',
                                             borderRadius: '10px', padding: '0.75rem',
                                             fontSize: '0.8rem', color: 'var(--color-dusk)',
                                             cursor: 'pointer', textAlign: 'left',
                                             transition: 'all 0.2s'
                                         }}
                                         onMouseOver={e => {
-                                            e.target.style.background = 'var(--color-prussian)';
-                                            e.target.style.color = 'var(--color-alabaster)';
+                                            e.target.style.background = 'rgba(99,102,241,0.12)';
+                                            e.target.style.color = 'var(--color-accent)';
                                         }}
                                         onMouseOut={e => {
-                                            e.target.style.background = 'var(--color-alabaster)';
-                                            e.target.style.color = 'var(--color-dusk)';
+                                            e.target.style.background = 'rgba(99,102,241,0.04)';
+                                            e.target.style.color = 'var(--color-text-primary)';
                                         }}
                                     >
                                         {s}
@@ -146,20 +146,20 @@ const GlobalChatPage = () => {
                         >
                             {msg.role === 'assistant' && (
                                 <div style={{
-                                    background: 'var(--color-prussian)', padding: '6px',
+                                    background: 'rgba(99,102,241,0.12)', padding: '6px',
                                     borderRadius: '8px', height: 'fit-content', flexShrink: 0
                                 }}>
-                                    <Brain style={{ width: '16px', height: '16px', color: 'var(--color-alabaster)' }} />
+                                    <Brain style={{ width: '16px', height: '16px', color: 'var(--color-accent)' }} />
                                 </div>
                             )}
                             <div style={{
                                 maxWidth: '80%', borderRadius: '14px',
                                 padding: '0.75rem 1rem',
-                                background: msg.role === 'user' ? 'var(--color-dusk)' :
-                                    msg.error ? 'var(--color-card)' : 'var(--color-alabaster)',
-                                color: msg.role === 'user' ? 'var(--color-alabaster)' :
+                                background: msg.role === 'user' ? 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))' :
+                                    msg.error ? 'rgba(239,68,68,0.08)' : 'var(--color-input-bg)',
+                                color: msg.role === 'user' ? '#ffffff' :
                                     msg.error ? 'var(--color-danger)' : 'var(--color-ink)',
-                                border: msg.error ? '1px solid #fecaca' : 'none',
+                                border: msg.error ? '1px solid rgba(239,68,68,0.2)' : msg.role === 'assistant' ? '1px solid var(--color-card-border)' : 'none',
                             }}>
                                 {msg.role === 'assistant' ? (
                                     <div className="prose prose-sm dark:prose-invert" style={{ maxWidth: 'none', fontSize: '0.9rem' }}>
@@ -172,7 +172,7 @@ const GlobalChatPage = () => {
                                 {msg.sources?.length > 0 && (
                                     <div style={{
                                         marginTop: '0.75rem', paddingTop: '0.75rem',
-                                        borderTop: '1px solid #e0e1dd'
+                                        borderTop: '1px solid var(--color-card-border)'
                                     }}>
                                         <p style={{
                                             fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-denim)',
@@ -182,7 +182,7 @@ const GlobalChatPage = () => {
                                         </p>
                                         {msg.sources.map((src, j) => (
                                             <div key={j} style={{
-                                                fontSize: '0.75rem', background: 'var(--color-alabaster)',
+                                                fontSize: '0.75rem', background: 'rgba(119,141,169,0.06)',
                                                 borderRadius: '6px', padding: '0.5rem',
                                                 color: 'var(--color-denim)', lineHeight: 1.5, marginBottom: '0.25rem'
                                             }}>
@@ -194,10 +194,10 @@ const GlobalChatPage = () => {
                             </div>
                             {msg.role === 'user' && (
                                 <div style={{
-                                    background: 'var(--color-dusk)', padding: '6px',
+                                    background: 'rgba(99,102,241,0.12)', padding: '6px',
                                     borderRadius: '8px', height: 'fit-content', flexShrink: 0
                                 }}>
-                                    <User style={{ width: '16px', height: '16px', color: 'var(--color-alabaster)' }} />
+                                    <User style={{ width: '16px', height: '16px', color: 'var(--color-accent)' }} />
                                 </div>
                             )}
                         </motion.div>
@@ -206,13 +206,13 @@ const GlobalChatPage = () => {
                     {loading && (
                         <div style={{ display: 'flex', gap: '0.75rem' }}>
                             <div style={{
-                                background: 'var(--color-prussian)', padding: '6px',
+                                background: 'rgba(99,102,241,0.12)', padding: '6px',
                                 borderRadius: '8px', height: 'fit-content'
                             }}>
-                                <Brain style={{ width: '16px', height: '16px', color: 'var(--color-alabaster)' }} />
+                                <Brain style={{ width: '16px', height: '16px', color: 'var(--color-accent)' }} />
                             </div>
                             <div style={{
-                                background: 'var(--color-alabaster)', borderRadius: '14px',
+                                background: 'var(--color-input-bg)', borderRadius: '14px',
                                 padding: '0.75rem 1rem', display: 'flex',
                                 alignItems: 'center', gap: '0.5rem'
                             }}>
@@ -232,7 +232,7 @@ const GlobalChatPage = () => {
 
                 {/* Input */}
                 <form onSubmit={sendMessage} style={{
-                    padding: '1rem 1.5rem', borderTop: '1px solid #e0e1dd',
+                    padding: '1rem 1.5rem', borderTop: '1px solid var(--color-card-border)',
                     display: 'flex', gap: '0.75rem'
                 }}>
                     <input
@@ -241,19 +241,20 @@ const GlobalChatPage = () => {
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Ask about all your policies..."
                         style={{
-                            flex: 1, background: 'var(--color-alabaster)', border: '1px solid #e0e1dd',
+                            flex: 1, background: 'var(--color-input-bg)', border: '1.5px solid var(--color-card-border)',
                             borderRadius: '10px', padding: '0.75rem 1rem',
                             fontSize: '0.9rem', outline: 'none', color: 'var(--color-ink)'
                         }}
-                        onFocus={e => e.target.style.borderColor = 'var(--color-dusk)'}
-                        onBlur={e => e.target.style.borderColor = 'var(--color-alabaster)'}
+                        onFocus={e => e.target.style.borderColor = 'var(--color-accent)'}
+                        onBlur={e => e.target.style.borderColor = 'var(--color-card-border)'}
                         disabled={loading}
                     />
                     <button
                         type="submit"
                         disabled={loading || !input.trim()}
                         style={{
-                            background: 'var(--color-dusk)', color: 'var(--color-alabaster)',
+                            background: input.trim() ? 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))' : 'var(--color-card-border)',
+                            color: '#ffffff',
                             padding: '0 1.25rem', borderRadius: '10px',
                             border: 'none', cursor: 'pointer',
                             opacity: loading || !input.trim() ? 0.5 : 1,

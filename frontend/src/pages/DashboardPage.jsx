@@ -233,8 +233,11 @@ const DashboardPage = ({ initialView }) => {
             </div>
 
             {loading && (
-                <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(224,225,221,0.7)', backdropFilter: 'blur(4px)' }}>
-                    <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--color-dusk)' }} />
+                <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(13,27,42,0.5)', backdropFilter: 'blur(4px)' }}>
+                    <div style={{ background: 'var(--color-card)', borderRadius: '16px', padding: '24px 32px', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.2)', border: '1px solid var(--color-card-border)' }}>
+                        <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--color-accent)' }} />
+                        <span style={{ color: 'var(--color-text-primary)', fontSize: '15px', fontWeight: '500' }}>Loading results...</span>
+                    </div>
                 </div>
             )}
         </div>

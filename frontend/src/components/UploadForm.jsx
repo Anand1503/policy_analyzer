@@ -70,7 +70,7 @@ const UploadForm = ({ onComplete, onAnalysisReady }) => {
             const analysisData = await waitForAnalysis(docId);
             setPipelineStep('complete'); setStatusMessage('Analysis complete!');
             setUploading(false);
-            if (onAnalysisReady) setTimeout(() => onAnalysisReady(docId, analysisData), 800);
+            if (onAnalysisReady) setTimeout(() => onAnalysisReady(docId, analysisData), 200);
             else if (onComplete) onComplete(docId);
         } catch (err) {
             setError(err.response?.data?.detail || err.message || 'Processing failed');
@@ -149,7 +149,7 @@ const UploadForm = ({ onComplete, onAnalysisReady }) => {
     const resetForm = () => { setFile(null); setTextContent(''); setPipelineStep(null); setError(''); setProgress(0); setStatusMessage(''); };
 
     return (
-        <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', height: '100%', flex: 1 }}>
+        <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', height: '100%', flex: 1, justifyContent: (isRunning || pipelineStep === 'complete') ? 'center' : 'flex-start' }}>
             
             {/* Header (centered) */}
             <div style={{ 
@@ -179,21 +179,23 @@ const UploadForm = ({ onComplete, onAnalysisReady }) => {
                 {/* ── PIPELINE PROGRESS ── */}
                 {(isRunning || pipelineStep === 'complete') && (
                     <motion.div key="pipeline" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                        style={{ background: 'var(--color-card)', borderRadius: '16px', border: '1px solid var(--color-card-border)', padding: '32px', boxShadow: '0 2px 16px rgba(13,27,42,0.06)', marginBottom: '16px' }}>
+                        style={{ background: 'var(--color-card)', borderRadius: '16px', border: '1px solid var(--color-card-border)', padding: '32px', boxShadow: '0 4px 24px rgba(13,27,42,0.10)', marginBottom: '16px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {PIPELINE_STEPS.map((step, idx) => {
                                 const isActive = step.key === pipelineStep;
                                 const isDone = idx < currentStepIndex || pipelineStep === 'complete';
                                 return (
                                     <div key={step.key} style={{
-                                        display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px', borderRadius: '10px',
-                                        border: `1px solid ${isActive ? 'var(--color-card-border)' : isDone ? 'var(--color-success)' : 'var(--color-card-border)'}`,
-                                        background: isActive ? 'var(--color-card-border)' : isDone ? 'var(--color-success)' : 'var(--color-card-border)',
+                                        display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px', borderRadius: '12px',
+                                        border: `1.5px solid ${isActive ? 'var(--color-accent)' : isDone ? 'rgba(16,185,129,0.3)' : 'var(--color-card-border)'}`,
+                                        background: isActive ? 'rgba(99,102,241,0.08)' : isDone ? 'rgba(16,185,129,0.06)' : 'transparent',
+                                        boxShadow: isActive ? '0 0 20px rgba(99,102,241,0.1)' : 'none',
+                                        transition: 'all 0.3s ease',
                                     }}>
-                                        {isDone && !isActive ? <CheckCircle size={18} style={{ color: 'var(--color-success)', flexShrink: 0 }} />
-                                            : isActive ? <Loader2 size={18} style={{ color: 'var(--color-dusk)', flexShrink: 0, animation: 'spin 1s linear infinite' }} />
+                                        {isDone && !isActive ? <CheckCircle size={18} style={{ color: '#10b981', flexShrink: 0 }} />
+                                            : isActive ? <Loader2 size={18} style={{ color: 'var(--color-accent)', flexShrink: 0, animation: 'spin 1s linear infinite' }} />
                                                 : <step.icon size={18} style={{ color: 'var(--color-denim)', flexShrink: 0 }} />}
-                                        <span style={{ fontSize: '15px', fontWeight: '500', color: isActive ? 'var(--color-dusk)' : isDone ? 'var(--color-success)' : 'var(--color-denim)' }}>
+                                        <span style={{ fontSize: '15px', fontWeight: '500', color: isActive ? 'var(--color-accent)' : isDone ? '#10b981' : 'var(--color-denim)' }}>
                                             {step.label}
                                         </span>
                                     </div>
@@ -202,10 +204,10 @@ const UploadForm = ({ onComplete, onAnalysisReady }) => {
                         </div>
                         {pipelineStep === 'uploading' && (
                             <div style={{ borderRadius: '8px', height: '6px', background: 'rgba(119,141,169,0.1)', overflow: 'hidden', marginTop: '16px' }}>
-                                <div style={{ height: '100%', borderRadius: '8px', background: 'linear-gradient(90deg,#415a77,#778da9)', width: `${progress}%`, transition: 'width 0.3s' }} />
+                                <div style={{ height: '100%', borderRadius: '8px', background: 'linear-gradient(90deg, var(--color-accent), var(--color-accent-light))', width: `${progress}%`, transition: 'width 0.3s' }} />
                             </div>
                         )}
-                        <p style={{ fontSize: '13px', textAlign: 'center', color: 'var(--color-denim)', marginTop: '14px' }}>{statusMessage}</p>
+                        <p style={{ fontSize: '13px', textAlign: 'center', color: 'var(--color-text-muted)', marginTop: '14px', fontWeight: '500' }}>{statusMessage}</p>
                         {pipelineStep === 'complete' && (
                             <div style={{ marginTop: '20px', textAlign: 'center' }}>
                                 <button onClick={resetForm} style={{ padding: '10px 28px', borderRadius: '10px', border: '1.5px solid rgba(119,141,169,0.2)', background: 'transparent', color: 'var(--color-dusk)', fontSize: '15px', fontWeight: '600', cursor: 'pointer' }}>

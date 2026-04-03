@@ -189,7 +189,7 @@ const AnalysisResults = ({ data }) => {
                                 <div key={clause.id || i}
                                     style={{ borderTop: i > 0 ? '1px solid rgba(119,141,169,0.06)' : 'none' }}>
                                     {/* Collapsed row */}
-                                    <div className="px-5 py-4 flex items-start gap-3 cursor-pointer transition-colors hover:bg-gray-50/50"
+                                    <div className="px-5 py-4 flex items-start gap-3 cursor-pointer transition-colors hover:bg-black/[0.03] dark:hover:bg-white/[0.03]"
                                         onClick={() => setExpandedClause(isOpen ? null : i)}>
                                         <RiskIcon level={clause.risk_level} size={16} />
 
