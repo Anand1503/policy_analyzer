@@ -60,8 +60,8 @@ const AppRoutes = () => {
       <Route path="/history" element={<ProtectedRoute><DashboardPage initialView="history" /></ProtectedRoute>} />
       <Route path="/chat" element={<ProtectedRoute><GlobalChatPage /></ProtectedRoute>} />
 
-      {/* Default: login if not logged in, upload if logged in */}
-      <Route path="/" element={user ? <Navigate to="/upload" replace /> : <Navigate to="/login" replace />} />
+      {/* Default: landing if not logged in, upload if logged in */}
+      <Route path="/" element={user ? <Navigate to="/upload" replace /> : <LandingPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
