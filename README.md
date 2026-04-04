@@ -11,9 +11,9 @@ AI-powered privacy policy analysis system using Legal-BERT, T5, and RAG — full
 - **Explainability** — SHAP-based explanations for classification decisions
 - **Compliance Mapping** — GDPR and CCPA automated compliance evaluation
 - **Summarization** — T5-based simplified document summaries
-- **RAG Chat** — Ask questions about uploaded documents with source citations
+- **RAG Chat** — Ask questions about uploaded documents (Global and Document specific) with source citations
 - **JWT Authentication** — Secure user accounts with rate limiting
-- **Dashboard** — Interactive results with risk gauge, clause explorer, and recommendations
+- **Modern Dashboard UI** — Interactive results with risk gauges, clause explorers, dynamic animations (Framer Motion), charts (Recharts), and a unified Gemini-style chat input bar.
 
 ## Tech Stack
 
@@ -25,13 +25,13 @@ AI-powered privacy policy analysis system using Legal-BERT, T5, and RAG — full
 | Embeddings | SentenceTransformers (all-MiniLM-L6-v2) |
 | Vector DB | ChromaDB |
 | Auth | JWT (python-jose + bcrypt) |
-| Frontend | React 19 + Vite + CSS |
+| Frontend | React 19 + Vite + Tailwind CSS 4 + Framer Motion |
 | DevOps | Docker + Docker Compose |
 
 ## Project Structure
 
 ```
-policy_analyser/
+policy_analyzer/
 ├── backend/
 │   ├── app/
 │   │   ├── api/           # Auth, documents, analysis endpoints
@@ -48,8 +48,8 @@ policy_analyser/
 │   └── Dockerfile
 ├── frontend/
 │   ├── src/
-│   │   ├── components/    # Upload, Results, Chat, Navigation
-│   │   ├── pages/         # Landing, Login, Dashboard, Analysis
+│   │   ├── components/    # Upload, Results, ChatPanel, Unified Input, Navigation
+│   │   ├── pages/         # Landing, Login, Dashboard, GlobalChat
 │   │   ├── services/      # API client with JWT interceptor
 │   │   └── context/       # Auth context
 │   └── package.json
@@ -134,6 +134,10 @@ Upload → Extract (PyMuPDF/OCR) → Clean → Segment (SpaCy)
     → Summarize (T5) → Compliance (GDPR/CCPA)
     → Embed (MiniLM) → Store (ChromaDB) → Ready for Q&A
 ```
+
+## Troubleshooting Note: Blank View on Load
+
+If you load the app and get stuck on a loading screen or notice incomplete rendering on the landing page or dashboard, make sure the **Backend Server (FastAPI)** is up and running. The frontend relies heavily on a health check and initial authentication verification. Connection Refusal (ERR_CONNECTION_REFUSED) will block API-dependent views.
 
 ## Model Training
 
