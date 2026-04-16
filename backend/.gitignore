@@ -15,12 +15,14 @@ venv/
 env/
 
 # Environment variables (secrets)
-.env
+# .env is tracked so the project works out of the box
+# .env
 
-# Large ML models
+# Large ML models (keep legal-bert-final for the repo)
 models/*
 !models/README.md
 !models/.gitignore
+!models/legal-bert-final/
 
 # Datasets
 data/*

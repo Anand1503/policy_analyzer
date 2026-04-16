@@ -1,0 +1,12 @@
+{
+  "version": "vFINAL",
+  "base_model": "nlpaueb/legal-bert-base-uncased",
+  "training": "5 epochs focal loss, 9 frozen layers, max_length=128",
+  "dataset_sizes": {
+    "train": 2962,
+    "val": 644,
+    "test": 607
+  },
+  "f1_macro": 0.8867,
+  "f1_micro": 0.9009
+}

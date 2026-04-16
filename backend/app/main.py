@@ -50,6 +50,14 @@ async def lifespan(app: FastAPI):
     os.makedirs(settings.EXTRACTED_DIR, exist_ok=True)
     os.makedirs(settings.CHROMA_PERSIST_DIR, exist_ok=True)
 
+    # ── Tesseract OCR PATH (Windows) ─────────────────────────
+    import shutil
+    if shutil.which("tesseract") is None:
+        win_tesseract_dir = r"C:\Program Files\Tesseract-OCR"
+        if os.path.isfile(os.path.join(win_tesseract_dir, "tesseract.exe")):
+            os.environ["PATH"] = win_tesseract_dir + os.pathsep + os.environ.get("PATH", "")
+            logger.info(f"Added Tesseract to PATH: {win_tesseract_dir}")
+
     # ── Model Pre-loading ────────────────────────────────────
     if settings.PRELOAD_MODELS:
         try:
@@ -154,6 +162,15 @@ async def health_ready():
     try:
         import shutil
         ocr_ok = shutil.which("tesseract") is not None
+        # Also check the known Windows install path
+        if not ocr_ok:
+            win_tesseract = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+            if os.path.isfile(win_tesseract):
+                ocr_ok = True
+                # Add to PATH so pytesseract can find it
+                tesseract_dir = os.path.dirname(win_tesseract)
+                if tesseract_dir not in os.environ.get("PATH", ""):
+                    os.environ["PATH"] = tesseract_dir + os.pathsep + os.environ.get("PATH", "")
     except Exception:
         pass
 

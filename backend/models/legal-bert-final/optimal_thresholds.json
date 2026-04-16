@@ -1,0 +1,42 @@
+{
+  "DATA_COLLECTION": {
+    "threshold": 0.75,
+    "val_f1": 0.9175
+  },
+  "DATA_SHARING": {
+    "threshold": 0.725,
+    "val_f1": 0.7125
+  },
+  "USER_RIGHTS": {
+    "threshold": 0.675,
+    "val_f1": 0.8803
+  },
+  "DATA_RETENTION": {
+    "threshold": 0.775,
+    "val_f1": 0.9877
+  },
+  "SECURITY_MEASURES": {
+    "threshold": 0.75,
+    "val_f1": 0.9538
+  },
+  "THIRD_PARTY_TRANSFER": {
+    "threshold": 0.75,
+    "val_f1": 0.8535
+  },
+  "COOKIES_TRACKING": {
+    "threshold": 0.775,
+    "val_f1": 0.9231
+  },
+  "CHILDREN_PRIVACY": {
+    "threshold": 0.625,
+    "val_f1": 0.9851
+  },
+  "COMPLIANCE_REFERENCE": {
+    "threshold": 0.8,
+    "val_f1": 0.7945
+  },
+  "LIABILITY_LIMITATION": {
+    "threshold": 0.8,
+    "val_f1": 0.9542
+  }
+}
