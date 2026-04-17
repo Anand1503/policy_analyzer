@@ -18,6 +18,7 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from dotenv import load_dotenv
 
 from app.core.config import settings
@@ -89,6 +90,8 @@ app = FastAPI(
 )
 
 # ─── Middleware (order matters: outermost first) ─────────────
+# GZip compression — reduces API response sizes by ~60-70%
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(RequestIdMiddleware)
 if settings.ENABLE_METRICS:
     app.add_middleware(MetricsMiddleware)

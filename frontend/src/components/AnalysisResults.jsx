@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
     ShieldAlert, ShieldCheck, AlertTriangle, ChevronDown, ChevronUp,
-    FileText, Lightbulb, ListChecks, TrendingUp,
+    FileText, Lightbulb, ListChecks, TrendingUp, Tag, X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RiskDistributionChart, CategoryChart, ComplianceChart, ShapExplanation } from './RiskChart';
@@ -33,6 +33,7 @@ const formatCategory = (cat) =>
 const AnalysisResults = ({ data }) => {
     const [expandedClause, setExpandedClause] = useState(null);
     const [filter, setFilter] = useState('all'); // all | high | medium | low
+    const [categoryFilter, setCategoryFilter] = useState('all'); // all | specific category
 
     if (!data) return null;
 
@@ -40,10 +41,30 @@ const AnalysisResults = ({ data }) => {
     const rs = riskStyle(overall_risk);
     const scorePercent = Math.round((overall_score || 0) * 100);
 
-    // Filter clauses
-    const filteredClauses = filter === 'all'
-        ? clauses
-        : clauses?.filter(c => c.risk_level === filter || (filter === 'high' && c.risk_level === 'critical'));
+    // Extract unique categories with counts
+    const categoryInfo = useMemo(() => {
+        if (!clauses?.length) return [];
+        const counts = clauses.reduce((acc, c) => {
+            const cat = c.category || 'uncategorized';
+            acc[cat] = (acc[cat] || 0) + 1;
+            return acc;
+        }, {});
+        return Object.entries(counts)
+            .sort((a, b) => b[1] - a[1])
+            .map(([name, count]) => ({ name, count }));
+    }, [clauses]);
+
+    // Filter clauses by BOTH risk level and category
+    const filteredClauses = useMemo(() => {
+        let result = clauses || [];
+        if (filter !== 'all') {
+            result = result.filter(c => c.risk_level === filter || (filter === 'high' && c.risk_level === 'critical'));
+        }
+        if (categoryFilter !== 'all') {
+            result = result.filter(c => (c.category || 'uncategorized') === categoryFilter);
+        }
+        return result;
+    }, [clauses, filter, categoryFilter]);
 
     // Risk counts for filter tabs
     const riskCounts = clauses?.reduce((acc, c) => {
@@ -149,7 +170,7 @@ const AnalysisResults = ({ data }) => {
                             </span>
                         </h3>
 
-                        {/* Filter tabs */}
+                        {/* Risk level filter tabs */}
                         <div className="flex gap-1 p-0.5 rounded-lg" style={{ background: 'rgba(119,141,169,0.05)' }}>
                             {[
                                 { key: 'all', label: 'All' },
@@ -171,6 +192,64 @@ const AnalysisResults = ({ data }) => {
                             ))}
                         </div>
                     </div>
+
+                    {/* ── Category filter pills ──────────────── */}
+                    {categoryInfo.length > 0 && (
+                        <div className="mt-4 pt-3" style={{ borderTop: '1px solid rgba(119,141,169,0.06)' }}>
+                            <div className="flex items-center gap-2 mb-2">
+                                <Tag className="w-3.5 h-3.5" style={{ color: 'var(--color-denim)' }} />
+                                <span className="text-[11px] font-semibold" style={{ color: 'var(--color-denim)', letterSpacing: '0.03em', textTransform: 'uppercase' }}>
+                                    Filter by Category
+                                </span>
+                                {categoryFilter !== 'all' && (
+                                    <button
+                                        onClick={() => setCategoryFilter('all')}
+                                        className="flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full transition-all"
+                                        style={{
+                                            background: 'rgba(99,102,241,0.08)',
+                                            color: '#6366f1',
+                                            border: '1px solid rgba(99,102,241,0.15)',
+                                        }}
+                                    >
+                                        <X className="w-3 h-3" />
+                                        Clear
+                                    </button>
+                                )}
+                            </div>
+                            <div className="flex flex-wrap gap-1.5">
+                                {categoryInfo.map(({ name, count }) => {
+                                    const isActive = categoryFilter === name;
+                                    return (
+                                        <button
+                                            key={name}
+                                            onClick={() => setCategoryFilter(isActive ? 'all' : name)}
+                                            className="text-[11px] font-medium px-2.5 py-1.5 rounded-lg transition-all"
+                                            style={{
+                                                background: isActive
+                                                    ? 'linear-gradient(135deg, rgba(99,102,241,0.12), rgba(99,102,241,0.06))'
+                                                    : 'rgba(119,141,169,0.04)',
+                                                color: isActive ? '#6366f1' : 'var(--color-dusk)',
+                                                border: `1px solid ${isActive ? 'rgba(99,102,241,0.25)' : 'rgba(119,141,169,0.08)'}`,
+                                                boxShadow: isActive ? '0 1px 4px rgba(99,102,241,0.10)' : 'none',
+                                                transform: isActive ? 'scale(1.03)' : 'scale(1)',
+                                            }}
+                                        >
+                                            {formatCategory(name)}
+                                            <span
+                                                className="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                                                style={{
+                                                    background: isActive ? 'rgba(99,102,241,0.15)' : 'rgba(119,141,169,0.08)',
+                                                    color: isActive ? '#6366f1' : 'var(--color-denim)',
+                                                }}
+                                            >
+                                                {count}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Clause list */}
