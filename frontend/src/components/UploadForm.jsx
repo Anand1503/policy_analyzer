@@ -116,30 +116,41 @@ const UploadForm = ({ onComplete, onAnalysisReady }) => {
     });
 
     const waitForAnalysis = (docId) => new Promise((resolve, reject) => {
-        let attempts = 0;
         const startTime = Date.now();
-        const POLL_INTERVAL = 2000; // 2s polling for faster feedback
-        const MAX_WAIT_MS = 5 * 60 * 1000; // 5 minute max
+        const POLL_INTERVAL = 2000;
+        const MAX_WAIT_MS = 5 * 60 * 1000;
         pollRef.current = setInterval(async () => {
-            attempts++;
             const elapsed = Math.round((Date.now() - startTime) / 1000);
+            if (Date.now() - startTime > MAX_WAIT_MS) {
+                clearInterval(pollRef.current);
+                reject(new Error('Analysis timed out after 5 minutes'));
+                return;
+            }
             try {
-                const res = await analysisAPI.results(docId);
-                if (res.data && res.data.clauses) {
-                    clearInterval(pollRef.current); resolve(res.data);
-                } else {
-                    setStatusMessage(`AI classification & risk scoring in progress... (${elapsed}s)`);
+                // Poll document status — reliable because run_pipeline() commits status='analyzed'
+                const docRes = await docsAPI.get(docId);
+                const status = docRes.data?.status;
+                if (status === 'failed') {
+                    clearInterval(pollRef.current);
+                    reject(new Error(docRes.data?.error_message || 'Analysis failed'));
+                    return;
                 }
-                if (Date.now() - startTime > MAX_WAIT_MS) {
-                    clearInterval(pollRef.current); reject(new Error('Analysis timed out after 5 minutes'));
+                if (status === 'analyzed') {
+                    clearInterval(pollRef.current);
+                    // Fetch final results once we know analysis is done
+                    try {
+                        const resultsRes = await analysisAPI.results(docId);
+                        resolve(resultsRes.data);
+                    } catch {
+                        // Results endpoint may lag slightly — resolve with minimal data
+                        resolve({ status: 'analyzed', document_id: docId });
+                    }
+                    return;
                 }
+                setStatusMessage(`AI classification & risk scoring in progress... (${elapsed}s)`);
             } catch (err) {
-                // 404 means analysis not done yet — keep polling
-                if (err.response?.status === 404) {
-                    setStatusMessage(`AI models processing your document... (${elapsed}s)`);
-                } else if (Date.now() - startTime > MAX_WAIT_MS) {
-                    clearInterval(pollRef.current); reject(new Error('Analysis timed out'));
-                }
+                // Network error — keep retrying until timeout
+                setStatusMessage(`Waiting for analysis... (${elapsed}s)`);
             }
         }, POLL_INTERVAL);
     });
